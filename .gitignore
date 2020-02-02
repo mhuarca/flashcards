@@ -1,0 +1,15 @@
+
+*.log
+
+#VSCode
+.classpath
+.project
+.settings/
+
+# Gradle
+bin/
+.gradle/
+build/
+
+# Node
+node_modules

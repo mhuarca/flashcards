@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta
+        name="viewport"
+        content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no"
+    />
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <style type="text/css">
+    body {
+        margin: 0;
+        font-family: "Roboto", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    </style>
+    <title>Not Found</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <div id="root"></div>
+    <script src="/resources/errorpage.js"></script>
+    <div style="display: none;" th:if="${#arrays.contains(@environment.getActiveProfiles(), 'dev')}">
+        <span th:text="${exception}" th:remove="tag"></span>
+        <span th:text="${url}" th:remove="tag"></span>
+    </div>
+</body>
+</html>

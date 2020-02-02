@@ -1,0 +1,29 @@
+plugins {
+    id 'base'
+    id 'com.moowork.node'
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+
+}
+
+
+allprojects {
+}
+
+
+subprojects {
+}
+
+/*
+
+./gradlew bootRun --parallel --args='--spring.profiles.active=dev'
+
+./gradlew bootJar
+
+*/
+

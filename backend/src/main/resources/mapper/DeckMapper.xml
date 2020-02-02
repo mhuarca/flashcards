@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huarca.spring.mapper.DeckMapper">
+    <cache />
+    <insert id="insert">
+        insert into decks (id, userId, title, category) values(
+            #{deck.id},
+            #{deck.userId},
+            #{deck.title},
+            #{deck.category}
+        )
+    </insert>
+
+    <select id="findById" resultMap="deckMetadata">
+        select id, userId, title, category from decks where id = #{id}
+    </select>
+
+    <select id="findByUserAndTitle" resultMap="deckMetadata">
+        select id, userId, title, category from decks where userId = #{userId} and title = #{title}
+    </select>
+
+    <resultMap id="deckMetadata" type="com.huarca.spring.model.DeckMetadata">
+        <constructor>
+            <idArg column="id" javaType="_int" />
+            <arg column="userId" javaType="String" />
+            <arg column="title" javaType="String" />
+            <arg column="category" javaType="String" />
+        </constructor>
+    </resultMap>
+
+    <select id="findDecksByUser" resultMap="deckBuilder">
+        select
+            D.id as deck_id,
+            #{userId} as user_id,
+            D.title as title,
+            D.category as category,
+            C.id as card_id,
+            C.orderColumn as orderColumn,
+            C.question as question,
+            C.answer as answer
+        from 
+            decks D left outer join cards C on D.id = C.deckId
+        where
+            userId = #{userId}
+    </select>
+
+    <resultMap id="deckBuilder" type="com.huarca.spring.mapper.DeckBuilder">
+        <id property="id" column="deck_id" />
+        <result property="userId" column="user_id" />
+        <result property="title" column="title" />
+        <result property="category" column="category" />
+        <collection property="cards" ofType="com.huarca.spring.model.Card">
+            <constructor>
+                <idArg column="card_id" javaType="_int" />
+                <arg column="orderColumn" javaType="_int" />
+                <arg column="question" javaType="String" />
+                <arg column="answer" javaType="String" />
+            </constructor>
+        </collection>
+    </resultMap>
+</mapper>
+

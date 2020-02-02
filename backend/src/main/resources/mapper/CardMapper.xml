@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.huarca.spring.mapper.CardMapper">
+    <cache />
+
+    <resultMap id="card" type="com.huarca.spring.model.Card">
+        <constructor>
+            <idArg column="id" javaType="_int" />
+            <arg column="orderColumn" javaType="_int" />
+            <arg column="question" javaType="String" />
+            <arg column="answer" javaType="String" />
+        </constructor>
+    </resultMap>
+
+    <insert id="insert">
+        insert into cards (deckId, question, answer) values(
+            #{deckId},
+            #{card.question},
+            #{card.answer}
+        )
+    </insert>
+
+    <update id="update">
+        update cards
+            <set>
+                question = #{card.question},
+                answer = #{card.answer}
+            </set>
+        where id = ${card.id}
+    </update>
+
+    <select id="findAllByDeckId" resultMap="card">
+        select id, orderColumn, question, answer from cards where deckId = #{deckId}
+    </select>
+
+</mapper>
+

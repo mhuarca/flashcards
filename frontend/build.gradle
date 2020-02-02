@@ -1,0 +1,55 @@
+plugins {
+    id 'base'
+    id 'com.moowork.node'
+}
+
+node {
+    version = '10.16.3'
+    npmVersion = '6.9.0'
+    download = true
+}
+
+task webpackDev(type: NpmTask) {
+    args = ['run', 'buildFrontendDev']
+
+    doFirst {
+        println "Parallel mode detected. Starting webpack in WATCH mode."
+    }
+}
+
+task webpackProd(type:NpmTask) {
+    args = ['run', 'buildFrontend']
+    inputs.file("package-lock.json")
+    inputs.dir("src/node/resources")
+    outputs.dir("$parent.projectDir/src/main/resources/js")
+    outputs.dir("$parent.projectDir/src/main/resources/css")
+
+    doFirst {
+        println "Starting webpack in PROD mode."
+    }
+    
+}
+
+webpackDev.dependsOn npmInstall
+webpackProd.dependsOn npmInstall
+
+// Only run the webpackDev task IF we are running in parallel and therefore we must be in dev mode.
+webpackDev.onlyIf { gradle.startParameter.isParallelProjectExecutionEnabled() }
+webpackProd.onlyIf { !gradle.startParameter.isParallelProjectExecutionEnabled() }
+
+// Use Spring boot task names to control when this project runs. 
+// Tasks are not real, just proxies to force webpack to run with bootRun and bootJar.
+task bootRun(type:IgnoreArgsTask) {
+    doFirst {
+        println 'Running bootRun proxy task'
+    }
+    
+}
+task bootJar(type:IgnoreArgsTask) {
+    doFirst {
+        println 'Running bootJar proxy task'
+    }
+}
+
+bootRun.dependsOn webpackDev
+bootJar.dependsOn webpackProd
