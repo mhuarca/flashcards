@@ -28,6 +28,7 @@ Java is *required*. Node and Gradle will be downloaded by the gradle wrapper. To
 projectRoot> ./gradlew bootJar
 projectRoot> java -jar ./backend/build/libs/backend.jar
 ```
+The site will be available at http://localhost:8080
 
 Tested on:
 * Windows 10, Java 8
